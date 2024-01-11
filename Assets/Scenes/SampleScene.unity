@@ -470,6 +470,7 @@ MonoBehaviour:
   lineLength: 0.13
   offset: 1.01
   isJumping: 0
+  isGrounded: 0
   jumpParticles: {fileID: 1812418824}
 --- !u!50 &716044272
 Rigidbody2D:
@@ -1227,9 +1228,9 @@ MonoBehaviour:
   m_LookaheadTime: 0
   m_LookaheadSmoothing: 0
   m_LookaheadIgnoreY: 0
-  m_XDamping: 1
-  m_YDamping: 1
-  m_ZDamping: 1
+  m_XDamping: 0
+  m_YDamping: 0
+  m_ZDamping: 0
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
   m_ScreenY: 0.5
