@@ -4,33 +4,104 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    const string LEFT = "left";
+    const string RIGHT = "right";
     [SerializeField] float speed; // Referencia a la velocidad de movimiento
     [SerializeField] Rigidbody2D rb; // Referencia al Rigidbody2D
-    [SerializeField] float distance; // Referencia a la distancia máxima de movimiento
-    Vector2 originalPosition; // Posición original del enemigo
-    bool rightMotion = true; // Dirección del movimiento
-                             // Esta función se ejecuta una vez al comienzo
+    [SerializeField] string direction; // Dirección del movimiento
+    [SerializeField] Transform castPos;
+    [SerializeField] float baseCastDistX;
+    [SerializeField] float baseCastDistY;
+    [SerializeField] Vector3 baseScale;
+
+    // Esta función se ejecuta una vez al comienzo
     public void Start()
     {
-        // Obtenemos la posición original del enemigo
-        originalPosition = transform.position;
+        // Obtenemos la escalado original del enemigo
+        baseScale = transform.localScale;
+        direction = RIGHT;
     }
-    // Esta función se ejecuta cada X tiempo
+    // Esta función se ejecuta cada X tiempoa
     public void FixedUpdate()
     {
-        // Si la posición original del enemigo sumada a la distancia máxima
-        // es inferior a la posición actual el enemigo sigue moviéndose a la derecha.
-        if ((transform.position.x < (originalPosition.x + distance)) && rightMotion)
+        float vX = speed;
+
+        if (direction == LEFT)
         {
-            rb.velocity = new Vector2(speed, rb.velocity.y);
+            vX = -speed; ;
+
         }
-        else if ((transform.position.x >= (originalPosition.x + distance)) && rightMotion) rightMotion = false;
-        // Si la posición original del enemigo restándole la distancia máxima
-        // es inferior a la posición actual el enemigo sigue moviéndose a la izquierda.
-        if ((transform.position.x > (originalPosition.x - distance)) && !rightMotion)
+
+        rb.velocity = new Vector2(vX, rb.velocity.y);
+
+        if (IsHittingWall() || IsNearEdge())
         {
-            rb.velocity = new Vector2(-speed, rb.velocity.y);
+            if (direction == LEFT)
+            {
+                ChangeDirection(RIGHT);
+            }
+            else if (direction == RIGHT)
+            {
+                ChangeDirection(LEFT);
+            }
+
         }
-        else if ((transform.position.x <= (originalPosition.x - distance)) && !rightMotion) rightMotion = true;
+
+        void ChangeDirection(string newDirection)
+        {
+            Vector3 newScale = baseScale;
+            if (newDirection == LEFT)
+            {
+                newScale.x = -baseScale.x;
+            }
+            else if (newDirection == RIGHT)
+            {
+                newScale.x = baseScale.x;
+            }
+            transform.localScale = newScale;
+            direction = newDirection;
+
+        }
+        bool IsHittingWall()
+        {
+            bool val = false;
+            float castDist = baseCastDistX;
+            //define cast distance for left & right
+            if (direction == LEFT)
+            {
+                castDist = -baseCastDistX;
+            }
+            else
+            {
+                castDist = baseCastDistX;
+            }
+            //determine target destination based on cast distance
+            Vector3 targetPos = castPos.position;
+            targetPos.x += castDist;
+            Debug.DrawLine(castPos.position, targetPos, Color.red);
+            if (Physics2D.Linecast(castPos.position, targetPos, 1 << LayerMask.NameToLayer("Terrain")))
+            {
+                val = true;
+            }
+            else val = false;
+
+            return val;
+        }
+        bool IsNearEdge()
+        {
+            bool val = true;
+            float castDist = baseCastDistY;
+            //determine target destination based on cast distance
+            Vector3 targetPos = castPos.position;
+            targetPos.y -= castDist;
+            Debug.DrawLine(castPos.position, targetPos, Color.yellow);
+            if (Physics2D.Linecast(castPos.position, targetPos, 1 << LayerMask.NameToLayer("Terrain")))
+            {
+                val = false;
+            }
+            else val = true;
+
+            return val;
+        }
     }
 }

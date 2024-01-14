@@ -49,20 +49,21 @@ public class AudioManager : MonoBehaviour
     private void LoadSFXClips()
     {
         // Los recursos (ASSETS) que se cargan en TIEMPO DE EJECUCIÓN DEBEN ESTAR DENTRO de una carpeta denominada /Assets/Resources/SFX
-        sfxClips["Jump"] = Resources.Load<AudioClip>("SFX/Jump");
-        sfxClips["CollectCoin"] = Resources.Load<AudioClip>("SFX/Collect_Coin");
-        sfxClips["Hit"] = Resources.Load<AudioClip>("SFX/Hit");
-        sfxClips["Shoot"] = Resources.Load<AudioClip>("SFX/Shoot");
+        sfxClips["Jump"] = Resources.Load<AudioClip>("SFX/smw_jump");
+        sfxClips["Coin"] = Resources.Load<AudioClip>("SFX/smw_coin");
+        sfxClips["Door"] = Resources.Load<AudioClip>("SFX/smw_door");
+        sfxClips["Stomp"] = Resources.Load<AudioClip>("SFX/smw_stomp_koopa_kid");
     }
 
     // Método privado para cargar la música de fondo directamente desde las carpetas
     private void LoadMusicClips()
     {
         // Los recursos (ASSETS) que se cargan en TIEMPO DE EJECUCIÓN DEBEN ESTAR DENTRO de una carpeta denominada /Assets/Resources/Music
-        musicClips["MainTheme"] = Resources.Load<AudioClip>("Music/Main_Theme");
-        musicClips["InvincibilityTheme"] = Resources.Load<AudioClip>("Music/Invincibility_Theme");
-        musicClips["Level_Complete"] = Resources.Load<AudioClip>("Music/Level_Complete");
-        musicClips["Lost_A_Life"] = Resources.Load<AudioClip>("Music/Lost_A_Life");
+        musicClips["Menu"] = Resources.Load<AudioClip>("Music/Menu");
+        musicClips["Stage1"] = Resources.Load<AudioClip>("Music/Stage1");
+        musicClips["Stage2"] = Resources.Load<AudioClip>("Music/Stage2");
+        musicClips["Win"] = Resources.Load<AudioClip>("Music/Win");
+        musicClips["Lost_A_Life"] = Resources.Load<AudioClip>("Music/smw_lost_a_life");
     }
 
     // Método de la clase singleton para reproducir efectos de sonido

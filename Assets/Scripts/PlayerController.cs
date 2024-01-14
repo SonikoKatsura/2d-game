@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using TMPro;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -10,9 +11,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float lineLength;
     [SerializeField] float offset;
     [SerializeField] bool isJumping;
-    [SerializeField] bool isGrounded;
 
+    [SerializeField] Sprite door;
+    [SerializeField] Sprite doorBad;
     [SerializeField] ParticleSystem jumpParticles;
+
+    private int score = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -34,7 +38,7 @@ public class PlayerController : MonoBehaviour
             jumpParticles.Play();
 
 
-           // AudioManager.instance.PlaySFX("Jump");
+            AudioManager.instance.PlaySFX("Jump");
         }
 
         //linea debajo de muñeco
@@ -60,6 +64,17 @@ public class PlayerController : MonoBehaviour
 
         }
 
+        if (score >= 15)
+        {
+            GameObject.Find("Door").GetComponent<SpriteRenderer>().sprite = door;
+            GameObject.Find("Door").GetComponent<BoxCollider2D>().enabled = true;
+        }
+        else
+        {
+            GameObject.Find("Door").GetComponent<SpriteRenderer>().sprite = doorBad;
+            GameObject.Find("Door").GetComponent<BoxCollider2D>().enabled = false;
+        }
+
         void SetAnimation(string name)
         {
 
@@ -73,6 +88,7 @@ public class PlayerController : MonoBehaviour
             GetComponent<Animator>().SetBool(name, true);
 
         }
+
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -80,15 +96,35 @@ public class PlayerController : MonoBehaviour
         {
             if (collision.collider.CompareTag("Enemy"))
             {
-              //  AudioManager.instance.PlayMusic("Lost_A_Life");
-              //  AudioManager.instance.PlaySFX("Hit");
-              //  SCManager.instance.LoadScene("Lose");
+                AudioManager.instance.PlaySFX("Stomp");
+
+                SCManager.instance.LoadScene("Lose");
             }
         }
     }
 
-    private void CreateDust() 
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-    
+        if (collision != null)
+        {
+            if (collision.CompareTag("Coin"))
+            {
+                AudioManager.instance.PlaySFX("Coin");
+                GameObject.Find("Score").GetComponent<TextMeshProUGUI>().text = "Coins: " + ++score;
+                Destroy(collision.gameObject);
+            }
+            if (collision.CompareTag("Door"))
+            {
+                AudioManager.instance.PlaySFX("Door");
+
+                GameManager.instance.ChangeLevel();
+            }
+            if (collision.CompareTag("Death"))
+            {
+                AudioManager.instance.PlaySFX("Stomp");
+
+                SCManager.instance.LoadScene("Lose");
+            }
+        }
     }
 }
