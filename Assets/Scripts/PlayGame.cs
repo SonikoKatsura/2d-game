@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,7 +16,6 @@ public class PlayGame : MonoBehaviour
         {
             AudioManager.instance.PlayMusic("Lost_A_Life");
         }
-        GameManager.instance.level = 1;
     }
     // Update is called once per frame
     void Update()
@@ -33,6 +31,10 @@ public class PlayGame : MonoBehaviour
                 AudioManager.instance.PlayMusic("Stage1");
                 SCManager.instance.LoadScene("Level1");
             }
+        }
+        if (Input.GetButtonDown("Fire2"))
+        {
+            Application.Quit();
         }
     }
 }
