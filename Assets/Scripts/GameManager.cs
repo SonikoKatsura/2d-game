@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     {
 
     }
-
+   
     public void ChangeLevel()
     {
         if (level != 2)

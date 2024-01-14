@@ -17,6 +17,7 @@ public class PlayGame : MonoBehaviour
         {
             AudioManager.instance.PlayMusic("Lost_A_Life");
         }
+        GameManager.instance.level = 1;
     }
     // Update is called once per frame
     void Update()
